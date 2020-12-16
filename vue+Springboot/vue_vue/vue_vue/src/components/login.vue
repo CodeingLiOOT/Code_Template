@@ -10,6 +10,8 @@
           <el-form-item prop="password">
             <el-input v-model="dataForm.password" type="password" placeholder="密码"></el-input>
           </el-form-item>
+          <router-link to="/forget">忘记密码</router-link>
+          <router-link to="/register">注册账号</router-link>
           <el-form-item>
             <el-button class="login-btn-submit" type="primary" @click="login()">登录</el-button>
           </el-form-item>
@@ -19,7 +21,6 @@
   </div>
 </template>
 <script>
-import axios from "axios"
 
 export default {
   data() {
@@ -103,4 +104,25 @@ export default {
   color: beige;
   padding: 20px 20px 10px 20px;
 }
+h3 {
+  color: #0babeab8;
+  font-size: 24px;
+}
+hr {
+  background-color: #444;
+  margin: 20px auto;
+}
+a {
+  text-decoration: none;
+  color: #aaa;
+  font-size: 15px;
+}
+a:hover {
+  color: coral;
+}
+
+.login-btn-submit{
+  margin-top: 10px;
+}
+
 </style>
