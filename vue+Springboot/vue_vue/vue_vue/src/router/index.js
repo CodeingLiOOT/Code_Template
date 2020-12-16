@@ -11,17 +11,22 @@ export default new Router({
     {
       path: '/',
       name:'Home',
-      component: Home
+      component: ()=>import("../components/Home")
     },
     {
       path: '/index',
       name: 'index',
-      component: index
+      component: ()=>import("../components/index")
     },
     {
       path: '/login',
       name:'login',
       component: ()=>import("../components/login")
+    },
+    {
+      path: '/register',
+      name:'register',
+      component: ()=>import("../components/Register")
     }
   ]
 })
