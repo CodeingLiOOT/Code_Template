@@ -31,6 +31,11 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   response => {
     if (response.status === 200) {
+      Vue.prototype.$message({
+        type: 'success',
+        message: response.data.msg,
+        showClose: true
+      })
       return Promise.resolve(response);
     } else {
       return Promise.reject(response);
@@ -44,7 +49,7 @@ axios.interceptors.response.use(
         case 401:
           Vue.prototype.$message({
             type: 'error',
-            message: '用户用户名或密码错误',
+            message: error.response.data.msg,
             showClose: true
           })
           break;

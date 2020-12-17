@@ -30,6 +30,25 @@
 <script>
 export default {
   data() {
+
+    /**
+     * 验证用户名
+     * @param rule [规则名称]
+     * @param value [输入框值]
+     * @param callback [回调函数]
+     */
+    let validateUsername=(rule,value,callback)=>{
+      if (value === "") {
+        callback(new Error("请输入账号"));
+      } else {
+        const regPass = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        if (!regPass.test(value)) {
+          callback(new Error("至少八位字符，包含大小写字母和数字，不含特殊字符"));
+        }
+        callback();
+      }
+    };
+
     /**
      * 验证密码是否为空
      * @param rule [规则名字]
@@ -40,8 +59,12 @@ export default {
       if (value === "") {
         callback(new Error("请输入密码"));
       } else {
+        const regPass = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
         if (this.$refs.RegisterForm.confirmPassword !== "") {
           this.$refs.RegisterForm.validateField("confirmPass");
+        }
+        if (!regPass.test(value)) {
+          callback(new Error("至少八位字符，包含大小写字母和数字，不含特殊字符"));
         }
         callback();
       }
@@ -63,6 +86,12 @@ export default {
       }
     };
 
+    /**
+     * 验证邮箱
+     * @param rule [规则名称]
+     * @param value [输入框值]
+     * @param callback [回调函数]
+     */
     let validEmail = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入邮箱"));
@@ -84,10 +113,14 @@ export default {
       },
       RegisterRule: {
         userName: [{
-          required: true,
-          message: '请输入账号',
-          trigger: 'blur'
-        }],
+          validator: validateUsername,
+          trigger: 'change'
+        },
+          {
+            required: true,
+            message: '请输入账号',
+            trigger: 'blur'
+          }],
         password: [{
           validator: validatePass,
           trigger: 'change'
@@ -107,8 +140,8 @@ export default {
             trigger: 'blur'
           }],
         email: [{
-          validator:validEmail,
-          trigger:'change'
+          validator: validEmail,
+          trigger: 'change'
         },
           {
             required: true,
@@ -123,29 +156,16 @@ export default {
     register() {
       this.$refs.RegisterForm.validate((valid) => {
         if (valid) {
-          this.$notify({
-            type:'success',
-            message:'success',
-            duration:3000
+          this.$API.p_Register({
+            userName:this.RegisterForm.userName,
+            password:this.RegisterForm.password,
+            email:this.RegisterForm.email,
           })
-          // this.$API.p_Login({
-          //   userName: this.dataForm.userName,
-          //   password: this.dataForm.password,
-          // })
-          //   .then(
-          //     res => {
-          //       this.$store.commit('login', res);
-          //       this.$notify({
-          //         type: 'success',
-          //         message: 'welcome,' + this.dataForm.userName + '!',
-          //         duration: 3000
-          //       });
-          //       this.$router.replace('/index')
-          //     }
-          //   )
-          //   .catch(err => {
-          //
-          //   })
+          .then(
+            res=>{
+              this.$router.replace('/login');
+            }
+          )
         } else {
           return false
         }
@@ -174,7 +194,7 @@ export default {
   bottom: 0;
   left: 0;
   margin: auto;
-  height: 380px;
+  height: 400px;
   width: 400px;
   background-color: #112234;
   opacity: .8;

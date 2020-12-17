@@ -56,11 +56,7 @@ export default {
             .then(
               res => {
                 this.$store.commit('login', res);
-                this.$notify({
-                  type: 'success',
-                  message: 'welcome,' + this.dataForm.userName + '!',
-                  duration: 3000
-                });
+
                 this.$router.replace('/index')
               }
             )
