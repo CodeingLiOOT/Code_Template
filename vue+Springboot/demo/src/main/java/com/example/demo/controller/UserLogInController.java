@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/api/user/")
 public class UserLogInController {
 
     @Autowired
@@ -32,12 +32,12 @@ public class UserLogInController {
 
     @CrossOrigin
     @ResponseBody
-    @PostMapping(value = "api/loginUser")
+    @PostMapping(value = "login")
     public ResponseEntity doLogin(@RequestBody UserBean user){
         //response.setHeader("Access-Control-Allow-Origin","http://localhost:8080");
         //System.out.println(user.getUserName()+user.getPassword());
-        List<UserBean> userBean=userService.login(user);
-        if(userBean.size()==0){
+        List<UserBean> userBeans=userService.login(user.getUserName());
+        if(userBeans.size()==0|| !userBeans.get(0).getPassword().equals(user.getPassword())){
             Map<String,Object> map=new HashMap<>();
             map.put("code",1);
             map.put("msg","用户名或密码错误");
@@ -51,7 +51,25 @@ public class UserLogInController {
         return ResponseEntity.ok(map);
     }
 
-
-
-
+    @CrossOrigin
+    @ResponseBody
+    @PostMapping(value = "register")
+    public ResponseEntity doRegister(@RequestBody UserBean user){
+        //response.setHeader("Access-Control-Allow-Origin","http://localhost:8080");
+        //System.out.println(user.getUserName()+user.getPassword());
+        List<UserBean> userBean=userService.login(user.getUserName());
+        if(userBean.size()!=0){
+            Map<String,Object> map=new HashMap<>();
+            map.put("code",1);
+            map.put("msg","该用户名已被注册");
+            map.put("data",user);
+            return ResponseEntity.status(401).body(map);
+        }
+        userService.register(user);
+        Map<String,Object> map=new HashMap<>();
+        map.put("code",0);
+        map.put("msg","注册成功");
+        map.put("data",user);
+        return ResponseEntity.ok(map);
+    }
 }

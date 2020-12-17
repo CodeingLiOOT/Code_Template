@@ -8,6 +8,7 @@ export default class api {
    * @param {Object} p [发送的参数]
    * @returns {Promise<unknown>}
    */
-  static p_Login=p=>post('/loginUser',p);
+  static p_Login=p=>post('/user/login',p);
 
+  static p_Register=p=>post('/user/register',p);
 }

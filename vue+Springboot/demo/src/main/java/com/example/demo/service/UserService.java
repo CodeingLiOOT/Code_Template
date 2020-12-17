@@ -13,8 +13,12 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    public List<UserBean> login(UserBean user){
-        return userMapper.getUserInfo(user);
+    public List<UserBean> login(String userName){
+        return userMapper.loginByUsername(userName);
+    }
+
+    public void register(UserBean bean){
+        userMapper.register(bean);
     }
 }
 
