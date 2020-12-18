@@ -56,8 +56,9 @@ export default {
             .then(
               res => {
                 this.$store.commit('login', res);
-
-                this.$router.replace('/index')
+                //this.$router.replace('/index')
+                let redirect=decodeURIComponent(this.$route.query.redirect||'/index');
+                this.$router.push({path:redirect});
               }
             )
             .catch(err => {

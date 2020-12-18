@@ -5,7 +5,6 @@ import App from './App'
 import router from './router'
 import './element'
 import store from './vuex'
-
 import api from './request/api'
 
 //axios.defaults.baseURL='http://localhost:8090/api'

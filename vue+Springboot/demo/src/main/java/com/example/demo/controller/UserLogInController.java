@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.entity.UserBean;
 import com.example.demo.service.UserService;
+import com.example.demo.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -47,7 +48,11 @@ public class UserLogInController {
         Map<String,Object> map=new HashMap<>();
         map.put("code",0);
         map.put("msg","登陆成功");
-        map.put("data",user);
+        Map<String,Object>data=new HashMap<>();
+        data.put("user",user);
+        String token= JWTUtils.sign(user);
+        data.put("token",token);
+        map.put("data",data);
         return ResponseEntity.ok(map);
     }
 
@@ -70,6 +75,25 @@ public class UserLogInController {
         map.put("code",0);
         map.put("msg","注册成功");
         map.put("data",user);
+        return ResponseEntity.ok(map);
+    }
+
+    @CrossOrigin
+    @ResponseBody
+    @GetMapping(value = "getAllUser")
+    public ResponseEntity doTest(){
+        List<UserBean> userBeans=userService.selectAll();
+        if(userBeans.size()==0){
+            Map<String,Object> map=new HashMap<>();
+            map.put("code",1);
+            map.put("msg","没有用户");
+            map.put("data",userBeans);
+            return ResponseEntity.status(401).body(map);
+        }
+        Map<String,Object> map=new HashMap<>();
+        map.put("code",0);
+        map.put("msg","查询成功");
+        map.put("data",userBeans);
         return ResponseEntity.ok(map);
     }
 }
