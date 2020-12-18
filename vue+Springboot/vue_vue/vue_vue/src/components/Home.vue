@@ -7,12 +7,28 @@
     <el-main>
       <router-link to="/login">Go to login</router-link>
     </el-main>
+    <el-button type="primary" @click="test()">test</el-button>
   </el-container>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  methods:{
+    test(){
+        this.$API.g_getAllUser()
+        .then(
+          data=>{
+            alert(data[0].userName);
+          }
+        )
+      .catch(
+        error=>{
+
+        }
+      )
+    }
+  }
 }
 </script>
 

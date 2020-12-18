@@ -1,7 +1,6 @@
 import axios from 'axios';
-import QS from 'qs';
 import Vue from 'vue';
-
+import store from "../vuex";
 //环境切换时的url设置
 if (process.env.NODE_ENV === 'development') {
   axios.defaults.baseURL = 'api';
@@ -19,9 +18,17 @@ axios.defaults.timeout = 10000;
 //请求拦截器
 axios.interceptors.request.use(
   config => {
-      return config;
+    if(store.state.token){
+      config.headers.token=store.state.token;
+    }
+    return config;
   },
   error => {
+    Vue.prototype.$message({
+      type:'error',
+      message:'Token已过期',
+      showClose:true
+    });
     return Promise.reject(error);
   }
 )
@@ -53,6 +60,18 @@ axios.interceptors.response.use(
             showClose: true
           })
           break;
+        case 402:
+          Vue.prototype.$message({
+            type:'error',
+            message:'Token验证错误',
+            showClose:true
+          })
+          store.commit('logout');
+          Vue.prototype.$router.replace({
+            path:'/login',
+            query:{redirect:Vue.prototype.$router.currentRoute.fullPath}
+          });
+          break;
         case 404:
           Vue.prototype.$message({
             type:'error',
@@ -66,12 +85,14 @@ axios.interceptors.response.use(
             message:'没有权限访问',
             showClose:true
           })
+          break;
         default:
-          Vue.prototype.$message.$message({
+          Vue.prototype.$message({
             type: 'error',
             message: error.response.data.msg,
             showClose: true
           })
+          break;
       }
       return Promise.reject(error.response);
     }
@@ -90,7 +111,7 @@ export function get(url,params){
       params:params
     })
       .then(res=>{
-        resolve(res.data)
+        resolve(res.data.data)
       })
       .catch(err=>{
         reject(err.data)

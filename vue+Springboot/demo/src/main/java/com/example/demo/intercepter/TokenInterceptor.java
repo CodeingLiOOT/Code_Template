@@ -28,6 +28,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         }
         response.setCharacterEncoding("utf-8");
         String token = request.getHeader("token");
+        System.out.println(token);
         if(token != null){
             boolean result = JWTUtils.verify(token);
             if(result){
@@ -40,10 +41,10 @@ public class TokenInterceptor implements HandlerInterceptor {
         try{
             Map<String,String>res=new HashMap<>();
             res.put("msg","token 验证失败");
-            res.put("code","500");
-            response.setStatus(401);
+            res.put("code","402");
+            response.setStatus(402);
             response.getWriter().append(JSON.toJSONString(res));
-            System.out.println("认证失败，未通过拦截器");
+            //System.out.println("认证失败，未通过拦截器");
         }catch (Exception e){
             e.printStackTrace();
             response.sendError(500);

@@ -20,5 +20,8 @@ public class UserService {
     public void register(UserBean bean){
         userMapper.register(bean);
     }
+
+    public List<UserBean> selectAll(){
+        return userMapper.selectALL();}
 }
 
