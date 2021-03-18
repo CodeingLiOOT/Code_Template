@@ -3,11 +3,13 @@ package com.example.demo.entity;
 import com.sun.javafx.beans.IDProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
 @ApiModel(value = "用户")
+@Data
 public class UserBean implements Serializable {
     @ApiModelProperty(name = "ID",value = "用户ID",required = false)
     private long ID;
